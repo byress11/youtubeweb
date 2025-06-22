@@ -39,6 +39,7 @@ class ModernYouTubeApp {
         this.sidebarToggle = document.getElementById('sidebarToggle');
         this.navItems = document.querySelectorAll('.nav-item[data-section]');
         this.themeToggle = document.getElementById('themeToggle');
+        this.mobileThemeToggle = document.getElementById('mobileThemeToggle');
         this.loginButton = document.getElementById('loginButton');
         this.logo = document.querySelector('.logo');
 
@@ -108,6 +109,7 @@ class ModernYouTubeApp {
         this.menuButton.addEventListener('click', () => this.toggleSidebar());
         this.sidebarToggle.addEventListener('click', () => this.toggleSidebar());
         this.themeToggle.addEventListener('click', () => this.toggleTheme());
+        this.mobileThemeToggle.addEventListener('click', () => this.toggleTheme());
         this.loginButton.addEventListener('click', () => this.handleLogin());
         this.logo.addEventListener('click', () => this.goToHome());
 
@@ -173,6 +175,10 @@ class ModernYouTubeApp {
             document.documentElement.setAttribute('data-theme', 'dark');
             this.themeToggle.querySelector('.toggle-switch').classList.add('active');
             this.themeToggle.querySelector('.material-icons-round').textContent = 'light_mode';
+            this.mobileThemeToggle.querySelector('.material-icons-round').textContent = 'light_mode';
+        } else {
+            this.themeToggle.querySelector('.material-icons-round').textContent = 'dark_mode';
+            this.mobileThemeToggle.querySelector('.material-icons-round').textContent = 'dark_mode';
         }
     }
 
@@ -259,10 +265,12 @@ class ModernYouTubeApp {
             document.documentElement.setAttribute('data-theme', 'dark');
             this.themeToggle.querySelector('.toggle-switch').classList.add('active');
             this.themeToggle.querySelector('.material-icons-round').textContent = 'light_mode';
+            this.mobileThemeToggle.querySelector('.material-icons-round').textContent = 'light_mode';
         } else {
             document.documentElement.removeAttribute('data-theme');
             this.themeToggle.querySelector('.toggle-switch').classList.remove('active');
             this.themeToggle.querySelector('.material-icons-round').textContent = 'dark_mode';
+            this.mobileThemeToggle.querySelector('.material-icons-round').textContent = 'dark_mode';
         }
     }
 
