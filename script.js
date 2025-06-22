@@ -22,6 +22,7 @@ class ModernYouTubeApp {
         this.loadTrendingVideos();
         this.updateBadges();
         this.setupKeyboardShortcuts();
+        this.handleResize(); // Initialize responsive behavior
     }
 
     initializeElements() {
@@ -150,6 +151,15 @@ class ModernYouTubeApp {
                 if (e.target === modal) this.closeAllModals();
             });
         });
+        
+        // Close sidebar on overlay click (mobile)
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024 && !this.sidebar.classList.contains('collapsed')) {
+                if (!this.sidebar.contains(e.target) && !this.menuButton.contains(e.target)) {
+                    this.sidebar.classList.add('collapsed');
+                }
+            }
+        });
 
         // Keyboard events
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
@@ -229,13 +239,15 @@ class ModernYouTubeApp {
 
     toggleSidebar() {
         this.sidebar.classList.toggle('collapsed');
-        this.mainContent.classList.toggle('expanded');
         
-        // Update menu button visibility based on screen size
-        if (window.innerWidth > 1024) {
-            this.menuButton.style.display = this.sidebar.classList.contains('collapsed') ? 'block' : 'none';
-        } else {
+        // On mobile, always keep main content expanded
+        if (window.innerWidth <= 1024) {
+            this.mainContent.classList.add('expanded');
             this.menuButton.style.display = 'block';
+        } else {
+            this.mainContent.classList.toggle('expanded');
+            // Update menu button visibility based on screen size
+            this.menuButton.style.display = this.sidebar.classList.contains('collapsed') ? 'block' : 'none';
         }
     }
 
