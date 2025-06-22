@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="autoplay=(self), encrypted-media=(self), accelerometer=(self), gyroscope=(self), picture-in-picture=(self), clipboard-write=(self), web-share=(self)">
+    <title>Modern YouTube Player</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF0000'><path d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z'/></svg>">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="material-icons-round logo-icon">play_circle</span>
+                    <span class="logo-text">Modern YouTube</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <span class="material-icons-round">menu</span>
+                </button>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="nav-section">
+                    <button class="nav-item active" data-section="home">
+                        <span class="material-icons-round">home</span>
+                        <span class="nav-text">Ana Sayfa</span>
+                    </button>
+                    <button class="nav-item" data-section="trending">
+                        <span class="material-icons-round">trending_up</span>
+                        <span class="nav-text">Trendler</span>
+                    </button>
+                    <button class="nav-item" data-section="favorites">
+                        <span class="material-icons-round">favorite</span>
+                        <span class="nav-text">Favoriler</span>
+                        <span class="badge" id="favoritesBadge">0</span>
+                    </button>
+                    <button class="nav-item" data-section="history">
+                        <span class="material-icons-round">history</span>
+                        <span class="nav-text">Geçmiş</span>
+                    </button>
+                    <button class="nav-item" data-section="playlist">
+                        <span class="material-icons-round">playlist_play</span>
+                        <span class="nav-text">Oynatma Listesi</span>
+                        <span class="badge" id="playlistBadge">0</span>
+                    </button>
+                </div>
+                
+                <div class="nav-divider"></div>
+                
+                <div class="nav-section">
+                    <div class="section-title">Hesap</div>
+                    <button class="nav-item" id="loginButton">
+                        <span class="material-icons-round">account_circle</span>
+                        <span class="nav-text">Giriş Yap</span>
+                    </button>
+                </div>
+                
+                <div class="nav-divider"></div>
+                
+                <div class="nav-section">
+                    <div class="section-title">Ayarlar</div>
+                    <button class="nav-item" id="themeToggle">
+                        <span class="material-icons-round">dark_mode</span>
+                        <span class="nav-text">Koyu Tema</span>
+                        <div class="toggle-switch">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-button" id="menuButton">
+                        <span class="material-icons-round">menu</span>
+                    </button>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <input type="text" class="search-input" placeholder="Videolar, kanallar arayın veya YouTube linki yapıştırın..." id="searchInput">
+                            <button class="search-button" id="searchButton">
+                                <span class="material-icons-round">search</span>
+                            </button>
+                        </div>
+                        <button class="voice-search" id="voiceSearch" title="Sesli arama">
+                            <span class="material-icons-round">mic</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <div class="search-filters" id="searchFilters">
+                        <select class="filter-select" id="durationFilter">
+                            <option value="">Süre</option>
+                            <option value="short">4 dakikadan kısa</option>
+                            <option value="medium">4-20 dakika</option>
+                            <option value="long">20 dakikadan uzun</option>
+                        </select>
+                        <select class="filter-select" id="sortFilter">
+                            <option value="relevance">İlgililik</option>
+                            <option value="date">Yükleme tarihi</option>
+                            <option value="viewCount">Görüntülenme sayısı</option>
+                            <option value="rating">Değerlendirme</option>
+                        </select>
+                    </div>
+                    <button class="icon-button" id="settingsButton" title="Ayarlar">
+                        <span class="material-icons-round">settings</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="content-header">
+                    <div class="section-tabs">
+                        <button class="tab-button active" data-tab="videos">
+                            <span class="material-icons-round">video_library</span>
+                            Videolar
+                        </button>
+                        <button class="tab-button" data-tab="channels">
+                            <span class="material-icons-round">account_circle</span>
+                            Kanallar
+                        </button>
+                        <button class="tab-button" data-tab="playlists">
+                            <span class="material-icons-round">playlist_play</span>
+                            Oynatma Listeleri
+                        </button>
+                    </div>
+                    <div class="view-options">
+                        <button class="view-button active" data-view="grid" title="Izgara görünümü">
+                            <span class="material-icons-round">grid_view</span>
+                        </button>
+                        <button class="view-button" data-view="list" title="Liste görünümü">
+                            <span class="material-icons-round">view_list</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="loading-container" id="loadingContainer">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Yükleniyor...</p>
+                </div>
+
+                <div class="content-area">
+                    <div class="video-grid" id="videoGrid">
+                        <!-- Video kartları buraya dinamik olarak eklenecek -->
+                    </div>
+                    
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <div class="empty-icon">
+                            <span class="material-icons-round">video_library</span>
+                        </div>
+                        <h3>Henüz video yok</h3>
+                        <p>Bu bölümde görüntülenecek video bulunmuyor.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Video Player Modal -->
+        <div class="modal" id="playerModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title-section">
+                        <h2 id="videoTitle">Video Başlığı</h2>
+                        <div class="video-actions">
+                            <button class="action-button" id="favoriteButton" title="Favorilere ekle">
+                                <span class="material-icons-round">favorite_border</span>
+                            </button>
+                            <button class="action-button" id="playlistAddButton" title="Oynatma listesine ekle">
+                                <span class="material-icons-round">playlist_add</span>
+                            </button>
+                            <button class="action-button" id="shareButton" title="Paylaş">
+                                <span class="material-icons-round">share</span>
+                            </button>
+                            <button class="action-button" id="openYouTubeButton" title="YouTube'da Aç">
+                                <span class="material-icons-round">open_in_new</span>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="close-button" id="closeButton">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <div class="video-player-container">
+                    <div id="videoPlayer" style="width: 100%; height: 100%;"></div>
+                </div>
+                <div class="video-info">
+                    <div class="channel-info">
+                        <div class="channel-avatar">
+                            <span class="material-icons-round">account_circle</span>
+                        </div>
+                        <div class="channel-details">
+                            <p class="video-channel" id="videoChannel">Kanal Adı</p>
+                            <p class="video-stats">
+                                <span id="videoViews">0 görüntülenme</span>
+                                <span class="separator">•</span>
+                                <span id="videoDate">Yükleme tarihi</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="video-description" id="videoDescription">
+                        <p>Video açıklaması buraya gelecek...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Playlist Modal -->
+        <div class="modal" id="playlistModal">
+            <div class="modal-content small">
+                <div class="modal-header">
+                    <h3>Oynatma Listesine Ekle</h3>
+                    <button class="close-button" id="playlistCloseButton">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <div class="playlist-content">
+                    <div class="playlist-item" id="currentPlaylist">
+                        <span class="material-icons-round">queue_music</span>
+                        <span>Şu Anda Oynatma Listesi</span>
+                        <span class="playlist-count" id="currentPlaylistCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content medium">
+                <div class="modal-header">
+                    <h3>Ayarlar</h3>
+                    <button class="close-button" id="settingsCloseButton">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h4>Görünüm</h4>
+                        <div class="setting-item">
+                            <label for="autoplayToggle">Otomatik oynatma</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="autoplayToggle">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label for="qualitySelect">Video kalitesi</label>
+                            <select id="qualitySelect">
+                                <option value="auto">Otomatik</option>
+                                <option value="1080p">1080p</option>
+                                <option value="720p">720p</option>
+                                <option value="480p">480p</option>
+                                <option value="360p">360p</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <h4>Kısayollar</h4>
+                        <div class="shortcuts-list">
+                            <div class="shortcut-item">
+                                <span>Oynat/Duraklat</span>
+                                <kbd>Space</kbd>
+                            </div>
+                            <div class="shortcut-item">
+                                <span>Tam ekran</span>
+                                <kbd>F</kbd>
+                            </div>
+                            <div class="shortcut-item">
+                                <span>Ses açma/kapama</span>
+                                <kbd>M</kbd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+
+        <!-- Floating Action Button -->
+        <button class="fab" id="scrollToTop" title="Yukarı çık">
+            <span class="material-icons-round">keyboard_arrow_up</span>
+        </button>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+</html>
