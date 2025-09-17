@@ -1,3 +1,4 @@
+// coding: utf-8
 class ModernYouTubeApp {
     constructor() {
         this.API_KEY = 'AIzaSyCC0F6nmwpMoxt4bghLAaxUwo2V4QwxuLI';
